@@ -36,7 +36,7 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public void deleteEmployee(Long id) {
+    public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 }

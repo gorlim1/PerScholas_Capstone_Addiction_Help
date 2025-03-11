@@ -1,6 +1,6 @@
 package org.roche.perscholas_capstone_addiction_help.config;
 
-import org.rma.taskmanagement.service.CustomUserDetailsService;
+import org.roche.perscholas_capstone_addiction_help.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,11 +20,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/login", "/register").permitAll()  // Public access
-                        .requestMatchers("/employees/tasks/**").hasRole("EMPLOYEE")  // Employee task hub
-                        .requestMatchers("/employees/**", "/tasks/upload").hasRole("ADMIN")  // Admin access for managing employees and uploading tasks
-                        .requestMatchers("/tasks/**").hasRole("ADMIN")  // Admin-only access for managing tasks
+                        .requestMatchers("/admin/**").hasRole("ADMIN")  // Employee task hub
+                        .requestMatchers("/treatments/**").hasRole("USER")  // Admin access for managing treatments and uploading tasks
                         .anyRequest().authenticated())  // All other requests require authentication
 
                 .formLogin(formLogin -> formLogin
@@ -35,9 +35,9 @@ public class SecurityConfig {
                                 String role = grantedAuthority.getAuthority();
                                 try {
                                     if (role.equals("ROLE_ADMIN")) {
-                                        response.sendRedirect("/tasks");  // Admin redirect
-                                    } else if (role.equals("ROLE_EMPLOYEE")) {
-                                        response.sendRedirect("/employees/tasks");  // Employee redirect
+                                        response.sendRedirect("/admin/treatment-approvals");  // Admin redirect
+                                    } else {
+                                        response.sendRedirect("/treatments");  // User or Guest redirect, no authentication required
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();

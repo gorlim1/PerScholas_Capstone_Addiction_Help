@@ -1,0 +1,28 @@
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"> <head> <title>Create Treatment</title> <meta charset="UTF-8"> <style> body { font-family: Arial, sans-serif; margin: 20px; } .form-container { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9; } label { font-weight: bold; } input { width: 100%; padding: 8px; margin-top: 5px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; } button { background-color: green; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; } .cancel-btn { background-color: red; text-decoration: none; padding: 10px 15px; color: white; display: inline-block; border-radius: 5px; margin-top: 10px; } </style> </head> <body>
+<div class="form-container">
+    <h2>Create Treatment</h2>
+    <form th:action="@{/treatments/create}" method="post" th:object="${treatment}">
+
+        <label>Name:</label>
+        <input type="text" th:field="*{name}" required />
+
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" required />
+
+        <label>Phone:</label>
+        <input type="text" th:field="*{phone}" required />
+
+        <label>Insurance:</label>
+        <input type="text" th:field="*{insurance}" required />
+
+        <label>Address:</label>
+        <input type="text" th:field="*{address}" required />
+
+        <!-- Verified field is hidden, as only admin can approve -->
+        <input type="hidden" th:field="*{verified}" value="false" />
+
+        <button type="submit">Submit</button>
+        <a href="/treatments" class="cancel-btn">Cancel</a>
+    </form>
+</div>
+</body> </html>

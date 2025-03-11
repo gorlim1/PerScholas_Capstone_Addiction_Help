@@ -28,6 +28,13 @@ public class User {
     @NotBlank(message = "Password is required")
     private String password;
 
+    @NotNull
+    @NotBlank(message = "Phone number is required")
+    private String phone;
+
+    @NotBlank(message = "Insurance is required")
+    private String insurance;
+
     @Enumerated(EnumType.STRING)  // Store role as a string in the database
     private Role role;
 

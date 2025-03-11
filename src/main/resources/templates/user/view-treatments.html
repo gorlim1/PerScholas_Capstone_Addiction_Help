@@ -1,0 +1,32 @@
+<!DOCTYPE html><html xmlns:th="http://www.thymeleaf.org"> <head> <title>View Treatments</title> <meta charset="UTF-8"> <style> table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid black; padding: 10px; text-align: left; } th { background-color: #f2f2f2; } .filter-form { margin-bottom: 20px; } .create-btn { background-color: blue; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block; margin-bottom: 10px; } </style> </head> <body>
+<h2>All Approved Treatments</h2>
+
+<!-- Create Treatment Button -->
+<a href="/treatments/create" class="create-btn">Create New Treatment</a>
+
+<!-- Filter by Insurance -->
+<form action="/treatments" method="get" class="filter-form">
+    <label for="insurance">Filter by Insurance:</label>
+    <input type="text" id="insurance" name="insurance" placeholder="Enter insurance name">
+    <button type="submit">Filter</button>
+    <a href="/treatments"><button type="button">Reset</button></a>
+</form>
+
+<!-- Treatments Table -->
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Insurance</th>
+    </tr>
+    <tr th:each="treatment : ${treatments}">
+        <td th:text="${treatment.id}"></td>
+        <td th:text="${treatment.name}"></td>
+        <td th:text="${treatment.email}"></td>
+        <td th:text="${treatment.phone}"></td>
+        <td th:text="${treatment.insurance}"></td>
+    </tr>
+</table>
+</body> </html>

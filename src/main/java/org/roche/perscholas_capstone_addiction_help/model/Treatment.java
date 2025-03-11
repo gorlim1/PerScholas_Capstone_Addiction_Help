@@ -36,9 +36,7 @@ public class Treatment {
     @NotBlank(message = "Insurance is required")
     private String insurance;
 
-    @NotNull
-    @NotBlank(message = "Verification status is required")
-    private boolean verified;
+    private Boolean verified = false;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

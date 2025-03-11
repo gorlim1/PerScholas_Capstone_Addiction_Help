@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Admin - Manage Treatments</title>
+    <meta charset="UTF-8">
+    <style> table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid black;
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .approve-btn {
+        background-color: green;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .pending {
+        color: red;
+    }
+
+    .approved {
+        color: green;
+    } </style>
+</head>
+<body><h2>Admin - Manage Treatments</h2>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Insurance</th>
+        <th>Verification Status</th>
+        <th>Action</th>
+    </tr>
+    <tr th:each="treatment : ${treatments}">
+        <td th:text="${treatment.id}"></td>
+        <td th:text="${treatment.name}"></td>
+        <td th:text="${treatment.email}"></td>
+        <td th:text="${treatment.phone}"></td>
+        <td th:text="${treatment.insurance}"></td>
+        <td th:class="${treatment.verified} ? 'approved' : 'pending'"
+            th:text="${treatment.verified} ? 'Approved' : 'Pending'"></td>
+        <td>
+            <button th:if="!${treatment.verified}" class="approve-btn" th:attr="data-id=${treatment.id}">Approve
+            </button>
+        </td>
+    </tr>
+</table><!-- JavaScript should be at the bottom -->
+<script> document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".approve-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            let treatmentId = this.getAttribute("data-id");
+            fetch(`/admin/approve/${treatmentId}`, {method: "POST"}).then(response => {
+                if (response.ok) {
+                    alert("Treatment approved successfully!");
+                    location.reload(); // Refresh the page
+                } else {
+                    alert("Error: Unable to approve treatment.");
+                }
+            }).catch(error => {
+                console.error("Error:", error);
+                alert("Error: Unable to approve treatment.");
+            });
+        });
+    });
+}); </script>
+</body>
+</html>
