@@ -21,8 +21,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private TreatmentService treatmentService;
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model){
@@ -41,12 +39,8 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping("/profile")
-    public String userProfile(Model model, Principal principal) {
-        String email = principal.getName();
-        User user = userService.findByEmail(email);
-        model.addAttribute("user", user);
-        model.addAttribute("treatments", user.getTreatments());
-        return "user-profile";
+    @GetMapping("/")
+    public String home() {
+        return "home"; // Returns home.html
     }
 }

@@ -22,8 +22,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/login", "/register").permitAll()  // Public access
-                        .requestMatchers("/admin/**").hasRole("ADMIN")  // Employee task hub
+                        .requestMatchers("/", "/css/**", "/js/**", "/images/**", "/login", "/register", "/treatments/create").permitAll()  // Public access
+                        .requestMatchers("/admin/**").hasRole("ADMIN")  // Admin task hub
                         .requestMatchers("/treatments/**").hasRole("USER")  // Admin access for managing treatments and uploading tasks
                         .anyRequest().authenticated())  // All other requests require authentication
 
@@ -37,14 +37,14 @@ public class SecurityConfig {
                                     if (role.equals("ROLE_ADMIN")) {
                                         response.sendRedirect("/admin/treatment-approvals");  // Admin redirect
                                     } else {
-                                        response.sendRedirect("/treatments");  // User or Guest redirect, no authentication required
+                                        response.sendRedirect("/treatments");  // Redirect user to home page instead of /treatments
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             });
                         }))
-                .logout(logout -> logout.logoutSuccessUrl("/login").permitAll())
+                .logout(logout -> logout.logoutSuccessUrl("/").permitAll())  // Redirect to home page after logout
                 .userDetailsService(userDetailsService);
 
         return http.build();

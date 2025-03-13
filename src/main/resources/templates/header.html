@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style> .profile-section {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 16px;
+    }
+
+    .logout-btn {
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .logout-btn:hover {
+        background-color: darkred;
+    }
+    </style>
+</head>
+<body>
+<div th:fragment="body">
+    <div class="profile-section"><span th:text="${#authentication.name}">User</span>
+        <form th:action="@{/logout}" method="post" style="display: inline;">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -3,6 +3,9 @@ package org.roche.perscholas_capstone_addiction_help.service;
 import org.roche.perscholas_capstone_addiction_help.model.User;
 import org.roche.perscholas_capstone_addiction_help.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,4 +42,15 @@ public class UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
+    public String getUserRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            for (GrantedAuthority authority : authentication.getAuthorities()) {
+                return authority.getAuthority(); // Returns first role found
+            }
+        }
+        return null; // No role found
+    }
+
 }

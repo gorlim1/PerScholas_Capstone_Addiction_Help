@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface TreatmentRepository extends JpaRepository<Treatment, Long> {
 
-    List<Treatment> findByVerified(boolean verified);
-
-    @Query("SELECT t FROM Treatment t WHERE t.insurance = ?1 AND t.verified = true")
+    @Query("SELECT t FROM Treatment t WHERE t.insurance = ?1")
     List<Treatment> findByInsurance(String insurance);
 }

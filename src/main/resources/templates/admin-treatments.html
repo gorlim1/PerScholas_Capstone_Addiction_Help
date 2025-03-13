@@ -17,12 +17,31 @@
         background-color: #f2f2f2;
     }
 
-    .approve-btn {
-        background-color: green;
-        color: white;
+    .approve-btn, .edit-btn, .delete-btn, .create-btn {
         padding: 5px 10px;
         border: none;
         cursor: pointer;
+    }
+
+    .approve-btn {
+        background-color: green;
+        color: white;
+    }
+
+    .edit-btn {
+        background-color: blue;
+        color: white;
+    }
+
+    .delete-btn {
+        background-color: red;
+        color: white;
+    }
+
+    .create-btn {
+        background-color: blue;
+        color: white;
+        margin-bottom: 10px;
     }
 
     .pending {
@@ -31,9 +50,20 @@
 
     .approved {
         color: green;
-    } </style>
+    }
+
+    </style>
 </head>
-<body><h2>Admin - Manage Treatments</h2>
+
+
+<body>
+<!-- Profile Section -->
+
+<!-- Include Common Profile & Logout Section -->
+<div th:replace="header :: body"></div>
+
+<h2>Admin - Manage Treatments</h2>
+<button class="create-btn" onclick="location.href='/treatments/create'">Create Treatment</button>
 <table>
     <tr>
         <th>ID</th>
@@ -44,7 +74,7 @@
         <th>Verification Status</th>
         <th>Action</th>
     </tr>
-    <tr th:each="treatment : ${treatments}">
+    <tr th:each="treatment : ${treatments}" th:id="'row-' + ${treatment.id}">
         <td th:text="${treatment.id}"></td>
         <td th:text="${treatment.name}"></td>
         <td th:text="${treatment.email}"></td>
@@ -55,24 +85,27 @@
         <td>
             <button th:if="!${treatment.verified}" class="approve-btn" th:attr="data-id=${treatment.id}">Approve
             </button>
+            <button class="edit-btn" th:attr="data-id=${treatment.id}"
+                    th:onclick="|location.href='/admin/treatment/edit/' + ${treatment.id}|">Edit
+            </button>
+            <button class="delete-btn" th:attr="data-id=${treatment.id}">Delete</button>
         </td>
     </tr>
-</table><!-- JavaScript should be at the bottom -->
+</table>
+
 <script> document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".approve-btn").forEach(button => {
         button.addEventListener("click", function () {
-            let treatmentId = this.getAttribute("data-id");
-            fetch(`/admin/approve/${treatmentId}`, {method: "POST"}).then(response => {
-                if (response.ok) {
-                    alert("Treatment approved successfully!");
-                    location.reload(); // Refresh the page
-                } else {
-                    alert("Error: Unable to approve treatment.");
-                }
-            }).catch(error => {
-                console.error("Error:", error);
-                alert("Error: Unable to approve treatment.");
-            });
+            let id = this.getAttribute("data-id");
+            fetch(`/admin/treatment/approve/${id}`, {method: "POST"}).then(response => response.ok ? alert("Approved!") : alert("Error")).then(() => location.reload());
+        });
+    });
+    document.querySelectorAll(".delete-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            let id = this.getAttribute("data-id");
+            if (confirm("Are you sure you want to delete?")) {
+                fetch(`/admin/treatment/delete/${id}`, {method: "DELETE"}).then(response => response.ok ? alert("Deleted!") : alert("Error")).then(() => location.reload());
+            }
         });
     });
 }); </script>
